@@ -1,5 +1,6 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
+from api.models.Account import Account
 
 class TestReset(APITestCase):
     def test_http_200(self):
@@ -17,6 +18,7 @@ class TestReset(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         response = self.client.get('/balance?account_id=100')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Account.objects.count(), 0)
 
     def test_accounts_are_deleted(self):
         """Test whether multiple accounts have been deleted after reset."""
@@ -40,3 +42,4 @@ class TestReset(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         response = self.client.get('/balance?account_id=102')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Account.objects.count(), 0)
