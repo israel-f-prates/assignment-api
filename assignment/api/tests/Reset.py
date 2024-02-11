@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from api.models.Account import Account
 
-class TestReset(APITestCase):
+class ResetTests(APITestCase):
     def test_http_200(self):
         """The /reset endpoint must always return 200."""
         response = self.client.post('/reset')
