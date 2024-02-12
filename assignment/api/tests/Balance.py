@@ -17,3 +17,9 @@ class BalanceTests(APITestCase):
         response = self.client.get(f'/balance?account_id=100')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.json(), 0)
+
+    def test_balance_without_filter(self):
+        """Balance should reject requests without filtering."""
+        response = self.client.get(f'/balance')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        #self.assertEqual(response.json(), 0)
