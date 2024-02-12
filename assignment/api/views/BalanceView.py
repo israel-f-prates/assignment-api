@@ -12,7 +12,7 @@ class BalanceView(APIView):
             response = Response(0, status.HTTP_400_BAD_REQUEST)
         else:
             try:
-                account = Account.objects.get(account_id=request.query_params.get('account_id'))
+                account = Account.objects.get(id=request.query_params.get('account_id'))
                 response = Response(account.balance, status.HTTP_200_OK)
             except Account.DoesNotExist:
                 response = Response(0, status.HTTP_404_NOT_FOUND)
