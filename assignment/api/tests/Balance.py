@@ -22,4 +22,4 @@ class BalanceTests(APITestCase):
         """Balance should reject requests without filtering."""
         response = self.client.get(f'/balance')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        #self.assertEqual(response.json(), 0)
+        self.assertEqual(response.json(), 0)
