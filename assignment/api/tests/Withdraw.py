@@ -17,7 +17,7 @@ class WithdrawTests(APITestCase):
         response = self.client.post('/event', self.withdraw_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test_existing_account(self):
+    def test_existing_account_no_balance(self):
         """Withdrawing from an existing account without balance should fail."""
         response = self.client.post('/event', self.deposit_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
