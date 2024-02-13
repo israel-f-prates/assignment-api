@@ -14,6 +14,9 @@ class EventSerializer(serializers.Serializer):
     class Meta():
         fields = '__all__'
 
+    # The conversion between serialized and internal should handle validating
+    # the event data, such as allowed types, amount range and so on, even
+    # though the data may be validated again elsewhere in the code.
     def to_internal_value(self, data):
         if 'type' not in data:
             raise serializers.ValidationError
