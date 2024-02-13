@@ -11,7 +11,10 @@ from rest_framework import status
 class EventView(APIView):
     def deposit(self, destination_id, amount):
         destination, _ = Account.objects.get_or_create(id=destination_id)
-        destination.deposit(amount)
+        try:
+            destination.deposit(amount)
+        except ValueError:
+            return Response(0, status.HTTP_422_UNPROCESSABLE_ENTITY)
         destination.save()
         destination_serializer = AccountSerializer(destination)
         deposit_serializer = DepositSerializer({ 'destination' : destination_serializer.data })
@@ -22,7 +25,10 @@ class EventView(APIView):
             origin = Account.objects.get(id=origin_id)
         except Account.DoesNotExist:
             return Response(0, status.HTTP_404_NOT_FOUND)
-        origin.withdraw(amount)
+        try:
+            origin.withdraw(amount)
+        except ValueError:
+            return Response(0, status.HTTP_422_UNPROCESSABLE_ENTITY)
         origin.save()
         origin_serializer = AccountSerializer(origin)
         withdraw_serializer = WithdrawSerializer({ 'origin' : origin_serializer.data })
@@ -33,10 +39,16 @@ class EventView(APIView):
             origin = Account.objects.get(id=origin_id)
         except Account.DoesNotExist:
             return Response(0, status.HTTP_404_NOT_FOUND)
-        origin.withdraw(amount)
+        try:
+            origin.withdraw(amount)
+        except ValueError:
+            return Response(0, status.HTTP_422_UNPROCESSABLE_ENTITY)
         origin.save()
         destination, _ = Account.objects.get_or_create(id=destination_id)
-        destination.deposit(amount)
+        try:
+            destination.deposit(amount)
+        except ValueError:
+            return Response(0, status.HTTP_422_UNPROCESSABLE_ENTITY)
         destination.save()
         origin_serializer = AccountSerializer(origin)
         destination_serializer = AccountSerializer(destination)

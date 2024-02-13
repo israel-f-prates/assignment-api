@@ -7,13 +7,17 @@ class Account(models.Model):
 
     def deposit(self, amount):
         amount = Decimal(amount)
-        if amount > 0:
-            self.balance += amount
+        if amount <= 0:
+            raise ValueError('Amount must be greater than zero.')
+        self.balance += amount
 
     def withdraw(self, amount):
         amount = Decimal(amount)
-        if amount > 0 and amount <= self.balance:
-            self.balance -= amount
+        if amount > self.balance:
+            raise ValueError('Amount must be less than or equal to balance')
+        if amount <= 0:
+            raise ValueError('Amount must be greater than zero.')
+        self.balance -= amount
 
     @property
     def balance(self):
