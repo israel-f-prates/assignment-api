@@ -28,11 +28,11 @@ class DepositTests(APITestCase):
     def test_malformed_content(self):
         """Requests with malformed content should be rejected."""
         malformed_data = [
-            { 'destination' : '100', 'amount' : 100 },
-            { 'type' : 'deposit', 'amount' : 100 },
-            { 'type' : 'deposit', 'destination' : '100' },
-            { 'type' : 'does_not_exist', 'destination' : '100', 'amount' : 100 },
-            { 'type' : 'deposit', 'destination' : '100', 'amount' : -100 },
+            { 'destination' : '100', 'amount' : 100 }, # Missing type.
+            { 'type' : 'deposit', 'amount' : 100 }, # Missing destination.
+            { 'type' : 'deposit', 'destination' : '100' }, # Missing amount.
+            { 'type' : 'does_not_exist', 'destination' : '100', 'amount' : 100 }, # Invalid type.
+            { 'type' : 'deposit', 'destination' : '100', 'amount' : -100 }, # Invalid amount.
         ]
         for data in malformed_data:
             response = self.client.post('/event', data)
