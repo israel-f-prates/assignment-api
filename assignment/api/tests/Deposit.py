@@ -17,7 +17,7 @@ class DepositTests(APITestCase):
         response = self.client.post('/event', self.deposit_data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         response = self.client.post('/event', self.deposit_data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertDictEqual(response.json(), expected_data)
 
     def test_missing_payload(self):
