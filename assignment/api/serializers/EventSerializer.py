@@ -2,6 +2,8 @@ import decimal
 from rest_framework import serializers
 
 _valid_types = ('deposit', 'withdraw', 'transfer')
+_destination_required = ('deposit', 'transfer')
+_origin_required = ('withdraw', 'transfer')
 
 class EventSerializer(serializers.Serializer):
     type = serializers.CharField(max_length=32)
@@ -15,12 +17,18 @@ class EventSerializer(serializers.Serializer):
     def to_internal_value(self, data):
         if 'type' not in data:
             raise serializers.ValidationError
-        if 'amount' not in data:
-            raise serializers.ValidationError
         if data['type'] not in _valid_types:
             raise serializers.ValidationError
+        if data['type'] in _destination_required and 'destination' not in data:
+            raise serializers.ValidationError
+        if data['type'] in _origin_required and 'origin' not in data:
+            raise serializers.ValidationError
+        if 'amount' not in data:
+            raise serializers.ValidationError
         try:
-            decimal.Decimal(data['amount'])
-        except decimal.ConversionSyntax:
+            amount = decimal.Decimal(data['amount'])
+        except decimal.InvalidOperation:
+            raise serializers.ValidationError
+        if amount <= 0:
             raise serializers.ValidationError
         return super().to_internal_value(data)
